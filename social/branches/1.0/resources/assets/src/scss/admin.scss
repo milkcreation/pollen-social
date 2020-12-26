@@ -1,0 +1,52 @@
+@import '~presstify-framework/field/toggle-switch/scss/styles';
+
+.Social-tabIcon {
+  position: relative;
+  display: inline-block;
+  margin-right: 5px;
+  font-size: 16px;
+  line-height: 16px;
+  vertical-align: middle;
+  width: 16px;
+  height: 16px;
+}
+
+.Social-tabIcon > svg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  fill: #0073AA;
+}
+
+.nav-tabs > li > a:hover .Social-tabIcon > svg {
+  fill: #00A0D2;
+}
+
+.nav-tabs > li.active > a .Social-tabIcon > svg,
+.nav-tabs > li.active > a:focus .Social-tabIcon > svg {
+  fill: #555;
+}
+
+.Social-tabTitle {
+  vertical-align: middle;
+}
+
+.Social-tabStatus {
+  margin-left: 3px;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.Social-tabStatus--online {
+  color: #16a085;
+}
+
+.Social-tabStatus--offline {
+  color: #c0392b;
+}
+
+.Social-tabStatus--warning {
+  color: #f39c12;
+}
