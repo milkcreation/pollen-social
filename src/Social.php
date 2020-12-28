@@ -21,9 +21,9 @@ use Pollen\Social\Partial\SocialMenuPartial;
 use Pollen\Social\Partial\SocialSharePartial;
 use Psr\Container\ContainerInterface as Container;
 use tiFy\Contracts\Filesystem\LocalFilesystem;
-use tiFy\Contracts\Partial\Partial as PartialManagerContract;
 use tiFy\Contracts\View\Engine as ViewEngine;
-use tiFy\Partial\Partial as PartialManager;
+use tiFy\Partial\Contracts\PartialContract;
+use tiFy\Partial\Partial;
 use tiFy\Support\Concerns\BootableTrait;
 use tiFy\Support\Concerns\ContainerAwareTrait;
 use tiFy\Support\ParamsBag;
@@ -156,8 +156,8 @@ class Social implements SocialContract
                 }
             }
 
-            $partialManager = ($this->containerHas(PartialManagerContract::class))
-                ? $this->containerGet(PartialManagerContract::class) : new PartialManager();
+            $partialManager = ($this->containerHas(PartialContract::class))
+                ? $this->containerGet(PartialContract::class) : new Partial();
 
             $partialManager->register('social-menu', $this->containerHas(SocialMenuPartial::class)
                 ? SocialMenuPartial::class : new SocialMenuPartial($this, $partialManager));

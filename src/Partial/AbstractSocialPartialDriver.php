@@ -2,9 +2,9 @@
 
 namespace Pollen\Social\Partial;
 
-use tiFy\Contracts\Partial\Partial as PartialManagerContract;
 use Pollen\Social\SocialAwareTrait;
 use Pollen\Social\Contracts\SocialContract;
+use tiFy\Partial\Contracts\PartialContract;
 use tiFy\Partial\PartialDriver;
 
 abstract class AbstractSocialPartialDriver extends PartialDriver implements PartialDriverInterface
@@ -13,9 +13,9 @@ abstract class AbstractSocialPartialDriver extends PartialDriver implements Part
 
     /**
      * @param SocialContract $socialManager
-     * @param PartialManagerContract $partialManager
+     * @param PartialContract $partialManager
      */
-    public function __construct(SocialContract $socialManager, PartialManagerContract $partialManager)
+    public function __construct(SocialContract $socialManager, PartialContract $partialManager)
     {
         $this->setSocialManager($socialManager);
 

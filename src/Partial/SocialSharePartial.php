@@ -4,7 +4,7 @@ namespace Pollen\Social\Partial;
 
 use Illuminate\Support\Collection;
 use Pollen\Social\Channels\SocialChannelDriverInterface;
-use tiFy\Contracts\Partial\PartialDriver as PartialDriverContract;
+use tiFy\Partial\PartialDriverInterface;
 use tiFy\Wordpress\Query\QueryPost;
 
 class SocialSharePartial extends AbstractSocialPartialDriver
@@ -27,7 +27,7 @@ class SocialSharePartial extends AbstractSocialPartialDriver
     /**
      * @inheritDoc
      */
-    public function parseParams(): PartialDriverContract
+    public function parseParams(): PartialDriverInterface
     {
         $this->set('viewer.directory', $this->socialManager()->resources('/views/partial/menu'));
 

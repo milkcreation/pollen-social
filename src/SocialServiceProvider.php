@@ -2,8 +2,6 @@
 
 namespace Pollen\Social;
 
-use tiFy\Container\ServiceProvider;
-use tiFy\Contracts\Partial\Partial as PartialManagerContract;
 use Pollen\Social\Adapters\WordpressAdapter;
 use Pollen\Social\Channels\DailymotionChannel;
 use Pollen\Social\Channels\FacebookChannel;
@@ -19,6 +17,8 @@ use Pollen\Social\Channels\SocialChannelView;
 use Pollen\Social\Contracts\SocialContract;
 use Pollen\Social\Partial\SocialMenuPartial;
 use Pollen\Social\Partial\SocialSharePartial;
+use tiFy\Container\ServiceProvider;
+use tiFy\Partial\Contracts\PartialContract;
 use tiFy\Support\Proxy\View;
 
 class SocialServiceProvider extends ServiceProvider
@@ -160,14 +160,14 @@ class SocialServiceProvider extends ServiceProvider
         $this->getContainer()->add(SocialMenuPartial::class, function () {
             return new SocialMenuPartial(
                 $this->getContainer()->get(SocialContract::class),
-                $this->getContainer()->get(PartialManagerContract::class)
+                $this->getContainer()->get(PartialContract::class)
             );
         });
 
         $this->getContainer()->add(SocialSharePartial::class, function () {
             return new SocialSharePartial(
                 $this->getContainer()->get(SocialContract::class),
-                $this->getContainer()->get(PartialManagerContract::class)
+                $this->getContainer()->get(PartialContract::class)
             );
         });
     }
