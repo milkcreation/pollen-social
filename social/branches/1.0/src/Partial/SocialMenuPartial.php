@@ -4,7 +4,7 @@ namespace Pollen\Social\Partial;
 
 use Illuminate\Support\Collection;
 use Pollen\Social\Channels\SocialChannelDriverInterface;
-use tiFy\Contracts\Partial\PartialDriver as PartialDriverContract;
+use tiFy\Partial\PartialDriverInterface;
 
 class SocialMenuPartial extends AbstractSocialPartialDriver
 {
@@ -21,7 +21,7 @@ class SocialMenuPartial extends AbstractSocialPartialDriver
     /**
      * @inheritDoc
      */
-    public function parseParams(): PartialDriverContract
+    public function parseParams(): PartialDriverInterface
     {
         $this->set('viewer.directory', $this->socialManager()->resources('/views/partial/menu'));
 

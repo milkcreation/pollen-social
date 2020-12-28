@@ -2,11 +2,11 @@
 
 namespace Pollen\Social\Partial;
 
-use tiFy\Contracts\Partial\PartialDriver as PartialDriverContract;
+use tiFy\Partial\PartialDriverInterface as BasePartialDriverInterface;
 
 /**
  * @mixin \Pollen\Social\SocialAwareTrait
  */
-interface PartialDriverInterface extends PartialDriverContract
+interface PartialDriverInterface extends BasePartialDriverInterface
 {
 }
