@@ -2,7 +2,7 @@
 
 namespace Pollen\Social;
 
-use InvalidArgumentException, RuntimeException;
+use InvalidArgumentException;
 use Pollen\Social\Adapters\AdapterInterface;
 use Pollen\Social\Channels\DailymotionChannel;
 use Pollen\Social\Channels\FacebookChannel;
@@ -17,15 +17,17 @@ use Pollen\Social\Channels\ViadeoChannel;
 use Pollen\Social\Channels\VimeoChannel;
 use Pollen\Social\Channels\YoutubeChannel;
 use Pollen\Social\Contracts\SocialContract;
+use Pollen\Social\Metabox\ChannelMetabox;
 use Pollen\Social\Partial\SocialMenuPartial;
 use Pollen\Social\Partial\SocialSharePartial;
 use Psr\Container\ContainerInterface as Container;
+use RuntimeException;
 use tiFy\Contracts\Filesystem\LocalFilesystem;
 use tiFy\Contracts\View\Engine as ViewEngine;
-use tiFy\Partial\Contracts\PartialContract;
-use tiFy\Partial\Partial;
 use tiFy\Support\Concerns\BootableTrait;
 use tiFy\Support\Concerns\ContainerAwareTrait;
+use tiFy\Support\Concerns\MetaboxManagerAwareTrait;
+use tiFy\Support\Concerns\PartialManagerAwareTrait;
 use tiFy\Support\ParamsBag;
 use tiFy\Support\Proxy\Storage;
 use tiFy\Support\Proxy\View;
@@ -34,6 +36,8 @@ class Social implements SocialContract
 {
     use BootableTrait;
     use ContainerAwareTrait;
+    use MetaboxManagerAwareTrait;
+    use PartialManagerAwareTrait;
 
     /**
      * Instance de la classe.
@@ -113,7 +117,6 @@ class Social implements SocialContract
         if (!is_null($container)) {
             $this->setContainer($container);
         }
-
         if (!self::$instance instanceof static) {
             self::$instance = $this;
         }
@@ -153,22 +156,31 @@ class Social implements SocialContract
                     $this->registerChannel($name, array_merge([
                         'driver' => $this->defaultsChannels[$name],
                     ], $channels[$name] ?? []));
+
+                    if ($container = $this->getContainer()) {
+                        $container->add("social.channel.{$name}", function () use ($name) {
+                            return new ChannelMetabox($name, $this, $this->metaboxManager());
+                        });
+                    }
+
+                    $this->metaboxManager()->registerDriver(
+                        "social.channel.{$name}",
+                        $this->containerHas("social.channel.{$name}")
+                            ? "social.channel.{$name}"
+                            : new ChannelMetabox($name, $this, $this->metaboxManager())
+                    );
                 }
             }
 
-            $partialManager = ($this->containerHas(PartialContract::class))
-                ? $this->containerGet(PartialContract::class) : new Partial();
-
-            $partialManager->register('social-menu', $this->containerHas(SocialMenuPartial::class)
-                ? SocialMenuPartial::class : new SocialMenuPartial($this, $partialManager));
-            $partialManager->register('social-share', $this->containerHas(SocialSharePartial::class)
-                ? SocialSharePartial::class : new SocialSharePartial($this, $partialManager));
+            $this->partialManager()->register('social-menu', $this->containerHas(SocialMenuPartial::class)
+                ? SocialMenuPartial::class : new SocialMenuPartial($this, $this->partialManager()));
+            $this->partialManager()->register('social-share', $this->containerHas(SocialSharePartial::class)
+                ? SocialSharePartial::class : new SocialSharePartial($this, $this->partialManager()));
 
             $this->setBooted();
 
             events()->trigger('social.booted', [$this]);
         }
-
         return $this;
     }
 
@@ -305,7 +317,6 @@ class Social implements SocialContract
         if (!isset($this->resources) ||is_null($this->resources)) {
             $this->resources = Storage::local(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'resources');
         }
-
         return is_null($path) ? $this->resources : $this->resources->path($path);
     }
 
@@ -342,7 +353,6 @@ class Social implements SocialContract
         if (func_num_args() === 0) {
             return $this->viewEngine;
         }
-
         return $this->viewEngine->render($name, $data);
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * @var Pollen\Social\Metabox\ChannelMetaboxView $this
- * @var Pollen\Social\Contracts\ChannelDriver $channel
+ * @var Pollen\Social\Channels\SocialChannelDriverInterface $channel
  */
 ?>
 <span class="Social-tabIcon">

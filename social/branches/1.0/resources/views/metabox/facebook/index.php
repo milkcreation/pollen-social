@@ -1,7 +1,7 @@
 <?php
 /**
  * @var Pollen\Social\Metabox\ChannelMetaboxView $this
- * @var Pollen\Social\Contracts\ChannelDriver $channel
+ * @var Pollen\Social\Channels\SocialChannelDriverInterface $channel
  */
 ?>
 <table class="Form-table">
@@ -11,8 +11,8 @@
         </th>
         <td>
             <?php echo field('toggle-switch', [
-                'name'  => $this->name() . '[active]',
-                'value' => $this->value('active') ? 'on' : 'off',
+                'name'  => $this->getName() . '[active]',
+                'value' => $this->getValue('active') ? 'on' : 'off',
             ]); ?>
         </td>
     </tr>
@@ -24,8 +24,8 @@
         </th>
         <td>
             <?php echo field('text', [
-                'name'  => $this->name() . '[uri]',
-                'value' => $this->value('uri'),
+                'name'  => $this->getName() . '[uri]',
+                'value' => $this->getValue('uri'),
                 'attrs' => [
                     'size'        => 80,
                     'placeholder' => __('https://[url-du-service]/[nom-de-la-page]', 'tify'),
@@ -42,8 +42,8 @@
         </th>
         <td>
             <?php echo field('text', [
-                'name'  => $this->name() . '[profile_id]',
-                'value' => $this->value('profile_id'),
+                'name'  => $this->getName() . '[profile_id]',
+                'value' => $this->getValue('profile_id'),
                 'attrs' => [
                     'size' => 80,
                 ],
@@ -71,8 +71,8 @@
             </th>
             <td>
                 <?php echo field('toggle-switch', [
-                    'name'  => $this->name() . '[share]',
-                    'value' => filter_var($this->value('share'), FILTER_VALIDATE_BOOLEAN) ? 'on' : 'off',
+                    'name'  => $this->getName() . '[share]',
+                    'value' => filter_var($this->getValue('share'), FILTER_VALIDATE_BOOLEAN) ? 'on' : 'off',
                 ]); ?>
             </td>
         </tr>
@@ -85,8 +85,8 @@
         </th>
         <td>
             <?php echo field('number', [
-                'name'  => $this->name() . '[order]',
-                'value' => $this->value('order'),
+                'name'  => $this->getName() . '[order]',
+                'value' => $this->getValue('order'),
                 'attrs' => [
                     'size' => 2,
                 ],
