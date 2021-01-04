@@ -11,6 +11,8 @@ use tiFy\Contracts\View\Engine as ViewEngine;
 /**
  * @mixin \tiFy\Support\Concerns\BootableTrait
  * @mixin \tiFy\Support\Concerns\ContainerAwareTrait
+ * @mixin \tiFy\Support\Concerns\MetaboxManagerAwareTrait
+ * @mixin \tiFy\Support\Concerns\PartialManagerAwareTrait
  */
 interface SocialContract
 {

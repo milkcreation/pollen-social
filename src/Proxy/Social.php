@@ -11,6 +11,7 @@ use Pollen\Social\Contracts\SocialContract;
  * @method static SocialChannelDriverInterface|null getChannel(string $name)
  * @method static string getChannelLink(string $name, array $attrs = [])
  * @method static SocialChannelDriverInterface[]|array getChannels()
+ * @method static SocialContract setConfig(array $config)
  */
 class Social extends AbstractProxy
 {

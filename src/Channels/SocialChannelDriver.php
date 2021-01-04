@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace Pollen\Social\Channels;
 
@@ -12,7 +13,6 @@ use Pollen\Social\SocialAwareTrait;
 use tiFy\Support\Concerns\BootableTrait;
 use tiFy\Support\Concerns\ParamsBagTrait;
 use tiFy\Support\ParamsBag;
-use tiFy\Support\Proxy\Metabox;
 use tiFy\Support\Proxy\Url;
 use tiFy\Support\Proxy\View;
 
@@ -71,11 +71,15 @@ class SocialChannelDriver implements SocialChannelDriverInterface
     {
         try {
             return $this->params()->{$method}(...$arguments);
-        } catch(Exception $e) {
-            throw new BadMethodCallException(sprintf(
-                'SocialChannelDriver [%s] method call [%s] throws an exception: %s',
-                $this->getName(), $method, $e->getMessage()
-            ));
+        } catch (Exception $e) {
+            throw new BadMethodCallException(
+                sprintf(
+                    'SocialChannelDriver [%s] method call [%s] throws an exception: %s',
+                    $this->getName(),
+                    $method,
+                    $e->getMessage()
+                )
+            );
         }
     }
 
@@ -86,8 +90,6 @@ class SocialChannelDriver implements SocialChannelDriverInterface
     {
         if (!$this->isBooted()) {
             events()->trigger("social.channel.booting", [$this->getName(), $this]);
-
-            Metabox::registerDriver("social.channel.{$this->getName()}", (new ChannelMetabox())->setChannel($this));
 
             $this->parseParams()->setBooted();
 
@@ -145,7 +147,7 @@ class SocialChannelDriver implements SocialChannelDriverInterface
             /**
              * @var array $viewer Liste des attributs de configuration du pilote d'affichage.
              */
-            'viewer'            => []
+            'viewer'          => [],
         ];
     }
 
@@ -163,7 +165,10 @@ class SocialChannelDriver implements SocialChannelDriverInterface
     public function getIcon(): string
     {
         return $this->get('icon')
-            ?: call_user_func($this->socialManager()->resources(), "/assets/dist/img/channel/{$this->getName()}/icon.svg");
+            ?: call_user_func(
+                $this->socialManager()->resources(),
+                "/assets/dist/img/channel/{$this->getName()}/icon.svg"
+            );
     }
 
     /**
@@ -316,7 +321,8 @@ class SocialChannelDriver implements SocialChannelDriverInterface
             }
 
             if (!$params->has('content')) {
-                $params->set('content',
+                $params->set(
+                    'content',
                     ($params->get('icon', true) ? $this->getIcon() : '') .
                     ($params->get('title', true) ? $this->getTitle() : '')
                 );
@@ -325,10 +331,12 @@ class SocialChannelDriver implements SocialChannelDriverInterface
             $params->set('attrs.href', $this->getPageUrl());
 
             if ($this->isMobile() && $this->get('deeplink') && ($deeplink = $this->getDeeplink())) {
-                $params->set([
-                    'attrs.data-control'  => 'social.deeplink',
-                    'attrs.data-deeplink' => $deeplink,
-                ]);
+                $params->set(
+                    [
+                        'attrs.data-control'  => 'social.deeplink',
+                        'attrs.data-deeplink' => $deeplink,
+                    ]
+                );
             }
 
             if (!$params->has('attrs.class')) {

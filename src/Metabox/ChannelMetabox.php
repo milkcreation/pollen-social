@@ -1,9 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Pollen\Social\Metabox;
 
+use Pollen\Social\Contracts\SocialContract;
 use Pollen\Social\SocialAwareTrait;
 use Pollen\Social\Channels\SocialChannelDriverInterface;
+use tiFy\Metabox\Contracts\MetaboxContract;
 use tiFy\Metabox\MetaboxDriver;
 
 class ChannelMetabox extends MetaboxDriver
@@ -17,22 +21,41 @@ class ChannelMetabox extends MetaboxDriver
     protected $channel;
 
     /**
-     * @inheritDoc
+     * @param string $channelName
+     * @param SocialContract $socialManager
+     * @param MetaboxContract $metaboxManager
      */
-    public function defaults(): array
+    public function __construct(string $channelName, SocialContract $socialManager, MetaboxContract $metaboxManager)
     {
-        return array_merge(parent::defaults(), [
-            'name'     => $this->channel->getOptionName(),
-            'title'    => $this->channel->getTitle()
-        ]);
+        $this->setSocialManager($socialManager);
+        $channel = $this->socialManager()->loadChannel($channelName);
+        $this->setChannel($channel);
+
+        parent::__construct($metaboxManager);
     }
 
     /**
      * @inheritDoc
      */
-    public function defaultValue(): array
+    public function getDefaultValue()
     {
         return $this->channel->all();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getName(): string
+    {
+        return $this->name ?: $this->channel->getOptionName();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getTitle(): string
+    {
+        return $this->title ?? $this->view('title');
     }
 
     /**
@@ -57,10 +80,12 @@ class ChannelMetabox extends MetaboxDriver
         if (is_null($this->viewEngine)) {
             $this->viewEngine = parent::view();
 
-            $this->viewEngine->params([
-                'factory' => ChannelMetaboxView::class,
-                'channel' => $this->channel
-            ]);
+            $this->viewEngine->params(
+                [
+                    'factory' => ChannelMetaboxView::class,
+                    'channel' => $this->channel,
+                ]
+            );
         }
 
         if (func_num_args() === 0) {
