@@ -1,10 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Pollen\Social\Partial;
 
 use Illuminate\Support\Collection;
 use Pollen\Social\Channels\SocialChannelDriverInterface;
-use tiFy\Partial\PartialDriverInterface;
 use tiFy\Wordpress\Query\QueryPost;
 
 class SocialSharePartial extends AbstractSocialPartialDriver
@@ -22,16 +23,6 @@ class SocialSharePartial extends AbstractSocialPartialDriver
              */
             'channel' => [],
         ]);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function parseParams(): PartialDriverInterface
-    {
-        $this->set('viewer.directory', $this->socialManager()->resources('/views/partial/menu'));
-
-        return parent::parseParams();
     }
 
     /**
@@ -61,5 +52,13 @@ class SocialSharePartial extends AbstractSocialPartialDriver
         } else {
             return '';
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function viewDirectory(): string
+    {
+        return $this->socialManager()->resources('/views/partial/share');
     }
 }
