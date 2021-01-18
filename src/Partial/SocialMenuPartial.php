@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Pollen\Social\Partial;
 
@@ -23,8 +25,6 @@ class SocialMenuPartial extends AbstractSocialPartialDriver
      */
     public function parseParams(): PartialDriverInterface
     {
-        $this->set('viewer.directory', $this->socialManager()->resources('/views/partial/menu'));
-
         parent::parseParams();
 
         $defaultClasses = [
@@ -32,11 +32,9 @@ class SocialMenuPartial extends AbstractSocialPartialDriver
             'items'   => 'Social-menuChannels',
             'link'    => '%s'
         ];
-
         foreach ($defaultClasses as $k => $v) {
             $this->set("classes.{$k}", sprintf($this->get("classes.{$k}", '%s'), $v));
         }
-
         return $this;
     }
 
@@ -58,5 +56,13 @@ class SocialMenuPartial extends AbstractSocialPartialDriver
         }
 
         return parent::render();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function viewDirectory(): string
+    {
+        return $this->socialManager()->resources('/views/partial/menu');
     }
 }
